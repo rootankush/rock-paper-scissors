@@ -1,10 +1,13 @@
 let display = document.getElementById("display");
 let scoreDisplay = document.getElementById("scoreDisplay");
+let endDisplay = document.getElementById("endDisplay");
 
 let ComputerChoice = "";
 let PlayerChoice = "";
 let computerScore = 0;
 let playerScore = 0;
+let roundPlayed = 0;
+const maxRound = 5;
 
 function getComputerChoice() {
   ComputerChoice = ["rock", "paper", "scissor"];
@@ -12,21 +15,37 @@ function getComputerChoice() {
   ComputerChoice = ComputerChoice[Math.floor(Math.random() * len)];
 }
 
-function getPlayerChoice() {
-  function choseRock() {
+function choseRock() {
+  if (roundPlayed < maxRound) {
     PlayerChoice = "rock";
+    playRound();
   }
-  choseRock();
+}
 
-  function chosePaper() {
+function chosePaper() {
+  if (roundPlayed < maxRound) {
     PlayerChoice = "paper";
+    playRound();
   }
-  chosePaper();
+}
 
-  function choseScissor() {
+function choseScissor() {
+  if (roundPlayed < maxRound) {
     PlayerChoice = "scissor";
+    playRound();
   }
-  choseScissor();
+}
+
+function playRound() {
+  if (roundPlayed < maxRound) {
+    getComputerChoice();
+    gameLogic();
+    roundPlayed++;
+    updateScore();
+    if (roundPlayed === maxRound) {
+      endGame();
+    }
+  }
 }
 
 function gameLogic() {
@@ -55,22 +74,14 @@ function gameLogic() {
   }
 }
 
-let rockBtn = document
-  .getElementById("rockBtn")
-  .addEventListener("click", getPlayerChoice);
-let paperBtn = document
-  .getElementById("paperBtn")
-  .addEventListener("click", getPlayerChoice);
-let scissorBtn = document
-  .getElementById("scissorBtn")
-  .addEventListener("click", getPlayerChoice);
+function endGame() {
+  endDisplay.textContent = "End of Game. Reload Website";
+}
 
-const computerSelection = getComputerChoice();
-const playerSelection = getPlayerChoice();
+document.getElementById("rockBtn").addEventListener("click", choseRock);
+document.getElementById("paperBtn").addEventListener("click", chosePaper);
+document.getElementById("scissorBtn").addEventListener("click", choseScissor);
 
-for (let i = 0; i < 6; i++) {
-  getComputerChoice();
-  getPlayerChoice();
-  gameLogic(playerSelection, computerSelection);
+function updateScore() {
   scoreDisplay.textContent = `Computer: ${computerScore} || Player: ${playerScore}`;
 }
